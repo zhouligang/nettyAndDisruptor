@@ -1,7 +1,7 @@
 package com.bfxy.disruptor;
 
 import com.bfxy.entity.TranslatorData;
-import com.bfxy.entity.TranslatorDataWapper;
+import com.bfxy.entity.TranslatorDataWrapper;
 import com.lmax.disruptor.RingBuffer;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -9,9 +9,9 @@ public class MessageProducer {
 
     private String producerId;
 
-    private RingBuffer<TranslatorDataWapper> ringBuffer;
+    private RingBuffer<TranslatorDataWrapper> ringBuffer;
 
-    public MessageProducer(String producerId, RingBuffer<TranslatorDataWapper> ringBuffer) {
+    public MessageProducer(String producerId, RingBuffer<TranslatorDataWrapper> ringBuffer) {
         this.producerId = producerId;
         this.ringBuffer = ringBuffer;
     }
@@ -19,7 +19,7 @@ public class MessageProducer {
     public void onData(TranslatorData data, ChannelHandlerContext ctx) {
         long sequence = ringBuffer.next();
         try {
-            TranslatorDataWapper wapper = ringBuffer.get(sequence);
+            TranslatorDataWrapper wapper = ringBuffer.get(sequence);
             wapper.setData(data);
             wapper.setCtx(ctx);
         } finally {

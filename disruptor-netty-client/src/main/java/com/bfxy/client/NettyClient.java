@@ -60,15 +60,15 @@ public class NettyClient {
         }
     }
 
-    public void sendData() {
+    public void sendData(String name, String message) {
 
-        for (int i = 0; i < 10; i++) {
+//        for (int i = 0; i < 10; i++) {
             TranslatorData request = new TranslatorData();
-            request.setId("" + i);
-            request.setName("请求消息名称 " + i);
-            request.setMessage("请求消息内容 " + i);
+        request.setId("1");
+        request.setName(name);
+        request.setMessage(message);
             this.channel.writeAndFlush(request);
-        }
+//        }
     }
 
     public void close() throws Exception {

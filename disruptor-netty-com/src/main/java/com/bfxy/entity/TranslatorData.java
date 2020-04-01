@@ -1,37 +1,37 @@
 package com.bfxy.entity;
 
+import lombok.Data;
+import lombok.experimental.Accessors;
+
 import java.io.Serializable;
 
+@Data
+@Accessors(chain = true)
 public class TranslatorData implements Serializable {
 
     private static final long serialVersionUID = 8763561286199081881L;
 
+    /**
+     * ID
+     */
     private String id;
+
+    /**
+     * 发送人名称
+     */
     private String name;
-    private String message;    //传输消息体内容
 
-    public String getId() {
-        return id;
+    /**
+     * 传输消息体内容
+     */
+    private String message;
+
+    public TranslatorData() {
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public TranslatorData(TranslatorData request) {
+        this.id = request.getId();
+        this.name = request.getName();
+        this.message = request.getMessage();
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
 }

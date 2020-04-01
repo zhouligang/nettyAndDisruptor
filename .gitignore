@@ -9,3 +9,4 @@ bin
 /disruptor-netty-server/.mvn
 /disruptor-api/mvnw
 /disruptor-api/mvnw.cmd
+/disruptor-netty-com/disruptor-netty-com.iml

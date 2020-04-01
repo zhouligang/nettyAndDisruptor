@@ -2,7 +2,7 @@ package com.bfxy.entity;
 
 import io.netty.channel.ChannelHandlerContext;
 
-public class TranslatorDataWapper {
+public class TranslatorDataWrapper {
 
     private TranslatorData data;
 

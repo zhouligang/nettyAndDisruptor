@@ -1,12 +1,12 @@
 package com.bfxy.disruptor;
 
-import com.bfxy.entity.TranslatorDataWapper;
+import com.bfxy.entity.TranslatorDataWrapper;
 import com.lmax.disruptor.WorkHandler;
 
 /**
  * @author Alienware
  */
-public abstract class MessageConsumer implements WorkHandler<TranslatorDataWapper> {
+public abstract class MessageConsumer implements WorkHandler<TranslatorDataWrapper> {
 
     protected String consumerId;
 

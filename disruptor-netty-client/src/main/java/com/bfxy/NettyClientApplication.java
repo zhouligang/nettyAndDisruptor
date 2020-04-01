@@ -12,7 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class NettyClientApplication {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         SpringApplication.run(NettyClientApplication.class, args);
 
         MessageConsumer[] conusmers = new MessageConsumer[4];
@@ -27,6 +27,11 @@ public class NettyClientApplication {
                 conusmers);
 
         //建立连接 并发送消息
-        new NettyClient().sendData();
+        NettyClient zhangsan = new NettyClient();
+        NettyClient lisi = new NettyClient();
+        Thread.sleep(100L);
+        zhangsan.sendData("张三", "李四,你好");
+        Thread.sleep(100L);
+        lisi.sendData("李四", "张三,你好，你现在在哪");
     }
 }

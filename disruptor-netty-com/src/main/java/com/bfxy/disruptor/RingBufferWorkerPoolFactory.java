@@ -1,6 +1,6 @@
 package com.bfxy.disruptor;
 
-import com.bfxy.entity.TranslatorDataWapper;
+import com.bfxy.entity.TranslatorDataWrapper;
 import com.lmax.disruptor.*;
 import com.lmax.disruptor.dsl.ProducerType;
 
@@ -12,9 +12,9 @@ public class RingBufferWorkerPoolFactory {
 
     private static Map<String, MessageProducer> producers = new ConcurrentHashMap();
     private static Map<String, MessageConsumer> consumers = new ConcurrentHashMap();
-    private RingBuffer<TranslatorDataWapper> ringBuffer;
+    private RingBuffer<TranslatorDataWrapper> ringBuffer;
     private SequenceBarrier sequenceBarrier;
-    private WorkerPool<TranslatorDataWapper> workerPool;
+    private WorkerPool<TranslatorDataWrapper> workerPool;
 
     private RingBufferWorkerPoolFactory() {
 
@@ -27,7 +27,7 @@ public class RingBufferWorkerPoolFactory {
     public void initAndStart(ProducerType type, int bufferSize, WaitStrategy waitStrategy, MessageConsumer[] messageConsumers) {
         //1. 构建ringBuffer对象
         this.ringBuffer = RingBuffer.create(type,
-                () -> new TranslatorDataWapper(),
+                () -> new TranslatorDataWrapper(),
                 bufferSize,
                 waitStrategy);
         //2.设置序号栅栏
@@ -64,9 +64,9 @@ public class RingBufferWorkerPoolFactory {
      *
      * @author Alienware
      */
-    static class EventExceptionHandler implements ExceptionHandler<TranslatorDataWapper> {
+    static class EventExceptionHandler implements ExceptionHandler<TranslatorDataWrapper> {
         @Override
-        public void handleEventException(Throwable ex, long sequence, TranslatorDataWapper event) {
+        public void handleEventException(Throwable ex, long sequence, TranslatorDataWrapper event) {
         }
 
         @Override
