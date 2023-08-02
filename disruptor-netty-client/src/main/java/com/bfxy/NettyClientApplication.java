@@ -1,7 +1,6 @@
 package com.bfxy;
 
 import com.bfxy.client.MessageConsumerImpl4Client;
-import com.bfxy.client.NettyClient;
 import com.bfxy.disruptor.MessageConsumer;
 import com.bfxy.disruptor.RingBufferWorkerPoolFactory;
 import com.lmax.disruptor.BlockingWaitStrategy;
@@ -27,11 +26,11 @@ public class NettyClientApplication {
                 conusmers);
 
         //建立连接 并发送消息
-        NettyClient zhangsan = new NettyClient();
-        NettyClient lisi = new NettyClient();
-        Thread.sleep(100L);
-        zhangsan.sendData("张三", "李四,你好");
-        Thread.sleep(100L);
-        lisi.sendData("李四", "张三,你好，你现在在哪");
+//        NettyClient zhangsan = new NettyClient();
+//        NettyClient lisi = new NettyClient();
+//        Thread.sleep(100L);
+//        zhangsan.sendData("张三", "李四,你好");
+//        Thread.sleep(100L);
+//        lisi.sendData("李四", "张三,你好，你现在在哪");
     }
 }

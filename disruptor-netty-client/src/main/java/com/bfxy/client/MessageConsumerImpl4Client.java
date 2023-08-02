@@ -18,7 +18,8 @@ public class MessageConsumerImpl4Client extends MessageConsumer {
         ChannelHandlerContext ctx = event.getCtx();
         //业务逻辑处理:
         try {
-            System.err.println(response.getName() + "说:" + response.getMessage());
+            System.err.println("收到" + response.getName() + "消息:" + response.getMessage());
+//            ctx.writeAndFlush(event);
         } finally {
             ReferenceCountUtil.release(response);
         }

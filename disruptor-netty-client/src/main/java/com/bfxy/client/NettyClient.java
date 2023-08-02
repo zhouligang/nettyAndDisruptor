@@ -60,14 +60,15 @@ public class NettyClient {
         }
     }
 
-    public void sendData(String name, String message) {
+    public void sendData(String name, String message, String roomId) {
 
 //        for (int i = 0; i < 10; i++) {
-            TranslatorData request = new TranslatorData();
+        TranslatorData request = new TranslatorData();
         request.setId("1");
         request.setName(name);
         request.setMessage(message);
-            this.channel.writeAndFlush(request);
+        request.setRoomId(roomId);
+        this.channel.writeAndFlush(request);
 //        }
     }
 

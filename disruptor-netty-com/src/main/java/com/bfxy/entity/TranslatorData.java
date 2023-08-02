@@ -26,6 +26,11 @@ public class TranslatorData implements Serializable {
      */
     private String message;
 
+    /**
+     * 聊天室ID
+     */
+    private String roomId;
+
     public TranslatorData() {
     }
 
@@ -33,5 +38,6 @@ public class TranslatorData implements Serializable {
         this.id = request.getId();
         this.name = request.getName();
         this.message = request.getMessage();
+        this.roomId = request.getRoomId();
     }
 }

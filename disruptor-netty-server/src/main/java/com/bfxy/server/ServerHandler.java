@@ -10,6 +10,10 @@ import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
 
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
 public class ServerHandler extends ChannelInboundHandlerAdapter {
 
     /**
@@ -18,15 +22,29 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     private static final ChannelGroup GROUP = new DefaultChannelGroup(
             GlobalEventExecutor.INSTANCE);
 
+    private Map<String, Set<Channel>> groupMap = new ConcurrentHashMap<>();
+
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         TranslatorData request = (TranslatorData) msg;
         //自已的应用服务应该有一个ID生成规则
         String producerId = "code:sessionId:001";
         MessageProducer messageProducer = RingBufferWorkerPoolFactory.getInstance().getMessageProducer(producerId);
+
         //获取发送消息的channel
         Channel channel = ctx.channel();
-        for (Channel ch : GROUP) {
+
+        // channel加入到map中
+        Set<Channel> channels = Group.put(request.getRoomId(), channel);
+
+        // 广播给所有人，如果只是两个人聊天，那么发送给另外一个人即可
+        for (Channel ch : channels) {
+            // 如果连接失效，则剔除
+            if (!ch.isActive()) {
+                Group.remove(request.getRoomId(), ch);
+                GROUP.remove(ch);
+                continue;
+            }
             TranslatorData message = new TranslatorData(request);
             //代表是自己的消息
             if (ch == channel) {

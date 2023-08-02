@@ -33,6 +33,7 @@ public class NettyServer {
                         protected void initChannel(SocketChannel sc) throws Exception {
                             sc.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingDecoder());
                             sc.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingEncoder());
+//                            sc.pipeline().addLast(new WebSocketServerProtocolHandler("/chat", true));
                             sc.pipeline().addLast(new ServerHandler());
                         }
                     });
