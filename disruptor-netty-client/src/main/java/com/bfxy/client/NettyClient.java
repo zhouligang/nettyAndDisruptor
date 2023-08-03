@@ -1,7 +1,7 @@
 package com.bfxy.client;
 
 import com.bfxy.codec.MarshallingCodeCFactory;
-import com.bfxy.entity.TranslatorData;
+import com.bfxy.entity.ChatMessage;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.*;
@@ -63,7 +63,7 @@ public class NettyClient {
     public void sendData(String name, String message, String roomId) {
 
 //        for (int i = 0; i < 10; i++) {
-        TranslatorData request = new TranslatorData();
+        ChatMessage request = new ChatMessage();
         request.setId("1");
         request.setName(name);
         request.setMessage(message);

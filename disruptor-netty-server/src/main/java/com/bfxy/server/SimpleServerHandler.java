@@ -4,8 +4,9 @@ import com.bfxy.disruptor.MessageProducer;
 import com.bfxy.disruptor.RingBufferWorkerPoolFactory;
 import com.bfxy.entity.ChatMessage;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
@@ -13,8 +14,14 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Set;
 
+/**
+ * @Author zhouligang
+ * @Date 2023/8/3 16:25
+ */
 @Slf4j
-public class ServerHandler extends ChannelInboundHandlerAdapter {
+@ChannelHandler.Sharable
+public class SimpleServerHandler extends SimpleChannelInboundHandler<ChatMessage> {
+
 
     /**
      * 对channel进行管理
@@ -23,9 +30,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             GlobalEventExecutor.INSTANCE);
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        // 用client测试
-        ChatMessage request = (ChatMessage) msg;
+    protected void channelRead0(ChannelHandlerContext ctx, ChatMessage msg) throws Exception {
+        // 用socket.html测试
         //自已的应用服务应该有一个ID生成规则
         String producerId = "code:sessionId:001";
         MessageProducer messageProducer = RingBufferWorkerPoolFactory.getInstance().getMessageProducer(producerId);
@@ -33,22 +39,24 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         //获取发送消息的channel
         Channel channel = ctx.channel();
 
-        // channel加入到map中
-        Set<Channel> channels = Group.put(request.getRoomId(), channel);
+        // channel加入到缓存中,这个缺点在于，目标不说话就无法收到消息.在socket5中可以用userEventTriggered处理请求，拿到token，放入缓存
+        Set<Channel> channels = Group.put(msg.getRoomId(), channel);
 
         // 广播给所有人，如果只是两个人聊天，那么发送给另外一个人即可
         for (Channel ch : channels) {
             // 如果连接失效，则剔除
             if (!ch.isActive()) {
-                Group.remove(request.getRoomId(), ch);
+                Group.remove(msg.getRoomId(), ch);
                 GROUP.remove(ch);
                 continue;
             }
-            ChatMessage message = new ChatMessage(request);
+            ChatMessage message = new ChatMessage(msg);
             //代表是自己的消息
             if (ch == channel) {
                 message.setName("你");
             }
+            // 用socket.html测试
+//            ch.writeAndFlush(message);
             messageProducer.onData(message, ctx);
         }
     }

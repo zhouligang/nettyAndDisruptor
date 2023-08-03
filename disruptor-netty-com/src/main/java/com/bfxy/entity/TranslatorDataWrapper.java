@@ -4,15 +4,15 @@ import io.netty.channel.ChannelHandlerContext;
 
 public class TranslatorDataWrapper {
 
-    private TranslatorData data;
+    private ChatMessage data;
 
     private ChannelHandlerContext ctx;
 
-    public TranslatorData getData() {
+    public ChatMessage getData() {
         return data;
     }
 
-    public void setData(TranslatorData data) {
+    public void setData(ChatMessage data) {
         this.data = data;
     }
 

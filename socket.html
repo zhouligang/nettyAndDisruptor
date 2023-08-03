@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket客户端</title>
+</head>
+<script type="text/javascript">
+    var socket;
+    //是否支持WebSocket
+    if (window.WebSocket) {
+        //参数就是与服务器连接的地址
+        socket = new WebSocket("ws://localhost:8765/chat");
+        //当客户端接收到服务端发送来的消息时 onmessage就会被调用
+        //event 服务器返回的数据
+        socket.onmessage = function (event) {
+            var ta = document.getElementById("responseText");
+            ta.value = ta.value + "\n" + event.data;
+        }
+        //连接建立成功时，onopen被调用
+        socket.onopen = function (event) {
+            var ta = document.getElementById("responseText");
+            ta.value = "连接开启!";
+        }
+        //连接断开时，onclose被调用
+        socket.onclose = function (event) {
+            var ta = document.getElementById("responseText");
+            ta.value = ta.value + "\n" + "连接断开!";
+        }
+
+    } else {
+        alert("浏览器不支持WebSocket!");
+    }
+
+    function send(message) {
+        if (!window.WebSocket) {
+            //不支持WebSocket直接返回
+            return;
+        }
+        //socket的状态等于连接的话
+        //readyState返回socket的状态
+        if (socket.readyState == WebSocket.OPEN) {
+            //send(数据) WebSocket向后台发送数据的方法
+            //类似java的writeAndFlush
+            socket.send(message);
+        } else {
+            alert("连接尚未开启!");
+        }
+
+    }
+
+</script>
+<body>
+<form onsubmit="return false;">
+    <textarea name="message" style="width: 400px;height: 200px"></textarea>
+    <!--this.form.message.value  取出当前页面中 from标签下name为message的value值-->
+    <input onclick="send(this.form.message.value)" type="button" value="发送数据">
+
+    <h3>客户端输出：</h3>
+    <textarea id="responseText" style="width: 400px;height: 300px"></textarea>
+    <input onclick="javascript:document.getElementById('responseText').value=''" type="button" value="清空内容">
+
+</form>
+
+</body>
+</html>

@@ -1,14 +1,19 @@
 package com.bfxy.server;
 
-import com.bfxy.codec.MarshallingCodeCFactory;
+import com.bfxy.protocal.MessageDecoder;
+import com.bfxy.protocal.MessageEncoder;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.http.HttpObjectAggregator;
+import io.netty.handler.codec.http.HttpServerCodec;
+import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.timeout.IdleStateHandler;
 
 public class NettyServer {
 
@@ -31,10 +36,15 @@ public class NettyServer {
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel sc) throws Exception {
-                            sc.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingDecoder());
-                            sc.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingEncoder());
-//                            sc.pipeline().addLast(new WebSocketServerProtocolHandler("/chat", true));
-                            sc.pipeline().addLast(new ServerHandler());
+                            sc.pipeline().addLast(new IdleStateHandler(60, 0, 0));
+//                            sc.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingDecoder()); //client和server都用的时候
+//                            sc.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingEncoder()); //client和server都用的时候
+                            sc.pipeline().addLast(new HttpServerCodec());
+                            sc.pipeline().addLast(new HttpObjectAggregator(65536));
+                            sc.pipeline().addLast(new WebSocketServerProtocolHandler("/chat"));
+                            sc.pipeline().addLast(new MessageEncoder()); //只用server时
+                            sc.pipeline().addLast(new MessageDecoder()); //只用server时
+                            sc.pipeline().addLast(new SimpleServerHandler());
                         }
                     });
             //绑定端口，同步等等请求连接

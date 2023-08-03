@@ -1,7 +1,7 @@
 package com.bfxy.server;
 
 import com.bfxy.disruptor.MessageConsumer;
-import com.bfxy.entity.TranslatorData;
+import com.bfxy.entity.ChatMessage;
 import com.bfxy.entity.TranslatorDataWrapper;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -16,13 +16,13 @@ public class MessageConsumerImpl4Server extends MessageConsumer {
 
     @Override
     public void onEvent(TranslatorDataWrapper event) {
-        TranslatorData request = event.getData();
+        ChatMessage request = event.getData();
         ChannelHandlerContext ctx = event.getCtx();
         //1.业务处理逻辑:
         System.err.println("Sever端:" + request);
 
-        //2.回送响应信息:
-        TranslatorData response = new TranslatorData();
+        //2.根据具体情况回送响应信息:
+        ChatMessage response = new ChatMessage();
         response.setId(request.getId());
         response.setName(request.getName());
         response.setMessage(request.getMessage());

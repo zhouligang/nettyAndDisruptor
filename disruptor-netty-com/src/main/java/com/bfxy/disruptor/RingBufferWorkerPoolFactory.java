@@ -35,7 +35,8 @@ public class RingBufferWorkerPoolFactory {
         //3.设置工作池
         this.workerPool = new WorkerPool<>(this.ringBuffer,
                 this.sequenceBarrier,
-                new EventExceptionHandler(), messageConsumers);
+                new EventExceptionHandler(),
+                messageConsumers);
         //4 把所构建的消费者置入池中
         for (MessageConsumer mc : messageConsumers) {
             consumers.put(mc.getConsumerId(), mc);

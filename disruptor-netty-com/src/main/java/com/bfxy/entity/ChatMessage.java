@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @Data
 @Accessors(chain = true)
-public class TranslatorData implements Serializable {
+public class ChatMessage implements Serializable {
 
     private static final long serialVersionUID = 8763561286199081881L;
 
@@ -31,10 +31,10 @@ public class TranslatorData implements Serializable {
      */
     private String roomId;
 
-    public TranslatorData() {
+    public ChatMessage() {
     }
 
-    public TranslatorData(TranslatorData request) {
+    public ChatMessage(ChatMessage request) {
         this.id = request.getId();
         this.name = request.getName();
         this.message = request.getMessage();

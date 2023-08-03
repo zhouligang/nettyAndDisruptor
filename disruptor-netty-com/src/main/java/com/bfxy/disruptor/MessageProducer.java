@@ -1,6 +1,6 @@
 package com.bfxy.disruptor;
 
-import com.bfxy.entity.TranslatorData;
+import com.bfxy.entity.ChatMessage;
 import com.bfxy.entity.TranslatorDataWrapper;
 import com.lmax.disruptor.RingBuffer;
 import io.netty.channel.ChannelHandlerContext;
@@ -16,7 +16,7 @@ public class MessageProducer {
         this.ringBuffer = ringBuffer;
     }
 
-    public void onData(TranslatorData data, ChannelHandlerContext ctx) {
+    public void onData(ChatMessage data, ChannelHandlerContext ctx) {
         long sequence = ringBuffer.next();
         try {
             TranslatorDataWrapper wapper = ringBuffer.get(sequence);
